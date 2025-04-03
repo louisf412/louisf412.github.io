@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FC_ VALVE 1 CMD CLOSE</title>
+  <script>
+  function copyCode(codeBlockId) {
+    const codeBlock = document.getElementById(codeBlockId);
+    if (!codeBlock) return;
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text);
+  }
+  </script>
+</head>
+<body>
+  <h1>FC_ VALVE 1 CMD CLOSE</h1>
+  <h1>FC_ VALVE 1 CMD CLOSE</h1>
+<h2>Overview</h2>
+<p>This function controls a valve with close command functionality. It manages valve operation in both sequence and panel modes, handles feedback signals, and determines the valve's status based on its position and alarm conditions. The function provides a comprehensive control mechanism for a valve with open/close capabilities.</p>
+<h2>Function Inputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Input Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODE</td>
+<td>Bool</td>
+<td>Mode Selection (0=SEQuence; 1=PANel)</td>
+</tr>
+<tr>
+<td>EN_PAN_ALM</td>
+<td>Bool</td>
+<td>Enable alarms effect with PANel mode</td>
+</tr>
+<tr>
+<td>EN_PAN_CND</td>
+<td>Bool</td>
+<td>Enable sequence conditions effect with PANel mode</td>
+</tr>
+<tr>
+<td>ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm</td>
+</tr>
+<tr>
+<td>SEQ_INTERLOCKS</td>
+<td>Bool</td>
+<td>Sequence interlocks (0=Control disabled)</td>
+</tr>
+<tr>
+<td>FDBK_OPEN</td>
+<td>Bool</td>
+<td>Feedback signal indicating valve is open</td>
+</tr>
+<tr>
+<td>FDBK_CLOSE</td>
+<td>Bool</td>
+<td>Feedback signal indicating valve is closed</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Outputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Output Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VALVE_STATUS</td>
+<td>Int</td>
+<td>Integer value representing the current valve status</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Logic</h2>
+<p>The function implements the following logic:</p>
+<h3>Direct Command Processing</h3>
+<ul>
+<li>Resets PANEL_START if MODE is on AND either:</li>
+<li>EN_PAN_ALM is on AND ALARM is on, OR</li>
+<li>EN_PAN_CND is on AND SEQ_INTERLOCKS is off</li>
+</ul>
+<h3>Sequence Command Processing</h3>
+<ul>
+<li>Resets SEQUENCE_START if:</li>
+<li>ALARM is on, OR</li>
+<li>SEQ_INTERLOCKS is off, OR</li>
+<li>MODE is on</li>
+</ul>
+<h3>Valve Command Control</h3>
+<ul>
+<li>Sets VALVE_CMD if either:</li>
+<li>MODE is off AND SEQUENCE_START is on, OR</li>
+<li>MODE is on AND PANEL_START is on</li>
+</ul>
+<h3>Status Determination</h3>
+<p>The function determines VALVE_STATUS based on various conditions:</p>
+<ul>
+<li>Status 0: Valve open (VALVE_CMD off, FDBK_OPEN on, FDBK_CLOSE off)</li>
+<li>Status 2: Valve closed (VALVE_CMD on, FDBK_OPEN off, FDBK_CLOSE on)</li>
+<li>Status 4: Running open (VALVE_CMD off, FDBK_OPEN off, FDBK_CLOSE off, ALARM off)</li>
+<li>Status 8: Running close (VALVE_CMD on, FDBK_OPEN off, FDBK_CLOSE off, ALARM off)</li>
+<li>Status 16: Wrong position close (FDBK_OPEN off, FDBK_CLOSE on, ALARM on)</li>
+<li>Status 17: Wrong position open (FDBK_OPEN on, FDBK_CLOSE off, ALARM on)</li>
+<li>Status 18: Wrong position middle (Complex condition with ALARM on, involving inconsistent feedback signals)</li>
+</ul>
+<p>Each status value is assigned to VALVE_STATUS when its corresponding conditions are met, providing detailed information about the valve's current state.</p>
+</body>
+</html>

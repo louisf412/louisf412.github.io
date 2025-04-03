@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FC_ MOTOR 1 DO</title>
+  <script>
+  function copyCode(codeBlockId) {
+    const codeBlock = document.getElementById(codeBlockId);
+    if (!codeBlock) return;
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text);
+  }
+  </script>
+</head>
+<body>
+  <h1>FC_ MOTOR 1 DO</h1>
+  <h1>FC_ MOTOR 1 DO</h1>
+<h2>Overview</h2>
+<p>The "FC: MOTOR 1 DO" function is designed for motor control with dual operating modes (Sequence and Panel). It manages motor commands based on mode selection, interlocks, and local/remote operation status. The function also includes time metering functionality for maintenance purposes and provides status monitoring with various state codes.</p>
+<h2>Function Inputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Input Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODE</td>
+<td>Bool</td>
+<td>Mode Selection (0=SEQuence; 1=PANel)</td>
+</tr>
+<tr>
+<td>EN_PAN_ALM</td>
+<td>Bool</td>
+<td>Enable alarms effect with PANel mode</td>
+</tr>
+<tr>
+<td>EN_PAN_CND</td>
+<td>Bool</td>
+<td>Enable sequence conditions effect with PANel mode</td>
+</tr>
+<tr>
+<td>REMOTE</td>
+<td>Bool</td>
+<td>Ready to work from REMOTE</td>
+</tr>
+<tr>
+<td>LOCAL</td>
+<td>Bool</td>
+<td>Ready to work from LOCAL</td>
+</tr>
+<tr>
+<td>REMOTE_ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm (REMOTE)</td>
+</tr>
+<tr>
+<td>LOCAL_ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm (LOCAL)</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>Bool</td>
+<td>Device Warning alarm</td>
+</tr>
+<tr>
+<td>SEQUENCE_INTERLOCK</td>
+<td>Bool</td>
+<td>Sequence interlocks (0=Control disabled)</td>
+</tr>
+<tr>
+<td>LOCAL_START</td>
+<td>Bool</td>
+<td>Local START command</td>
+</tr>
+<tr>
+<td>LOCAL_STOP</td>
+<td>Bool</td>
+<td>Local STOP command (NC)</td>
+</tr>
+<tr>
+<td>FEEDBACK</td>
+<td>Bool</td>
+<td>Motor running feedback signal</td>
+</tr>
+<tr>
+<td>HOUR_SET</td>
+<td>Int</td>
+<td>Hours threshold for maintenance</td>
+</tr>
+<tr>
+<td>MAINT_ENABLE</td>
+<td>Bool</td>
+<td>Enable maintenance tracking</td>
+</tr>
+<tr>
+<td>CLOCK_1s</td>
+<td>Bool</td>
+<td>1-second clock pulse for time metering</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Outputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Output Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOTOR_STATUS</td>
+<td>Int</td>
+<td>Status code indicating motor operating state</td>
+</tr>
+<tr>
+<td>SERVICE_ALARM</td>
+<td>Bool</td>
+<td>Maintenance service alarm</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Logic</h2>
+<p>The function implements motor control logic with the following key operations:</p>
+<h3>Command Management</h3>
+<ul>
+<li>Resets PANEL_START command based on mode, alarms, and interlocks</li>
+<li>Resets SEQUENCE_START command based on alarms, interlocks, and mode</li>
+<li>Generates MOTOR_CMD based on the active mode (Sequence/Panel) and local/remote status</li>
+</ul>
+<h3>Time Metering</h3>
+<ul>
+<li>Tracks motor running time in seconds and hours when feedback is active</li>
+<li>Converts seconds to hours (3600 seconds = 1 hour)</li>
+<li>Provides reset capability for the time meter</li>
+</ul>
+<h3>Service Alarm</h3>
+<ul>
+<li>Generates SERVICE_ALARM when running hours exceed HOUR_SET threshold</li>
+<li>Only active when MAINT_ENABLE is true</li>
+</ul>
+<h3>Status Monitoring</h3>
+<ul>
+<li>Provides status codes to indicate different motor states:</li>
+<li>0: Remote/Not Running</li>
+<li>2: Warning Running</li>
+<li>4: Remote/Running</li>
+<li>6: Warning Stop</li>
+<li>8: Remote/Start/Stop Command and Waiting Running Feedback</li>
+<li>16: Fault Alarm</li>
+</ul>
+<p>The function uses STL jump commands (JCN) to control program flow and implements conditional logic using A (AND), O (OR), and other STL instructions to determine motor commands and status based on the current operating conditions.</p>
+</body>
+</html>

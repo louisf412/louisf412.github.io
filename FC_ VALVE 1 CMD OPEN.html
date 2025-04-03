@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FC_ VALVE 1 CMD OPEN</title>
+  <script>
+  function copyCode(codeBlockId) {
+    const codeBlock = document.getElementById(codeBlockId);
+    if (!codeBlock) return;
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text);
+  }
+  </script>
+</head>
+<body>
+  <h1>FC_ VALVE 1 CMD OPEN</h1>
+  <h1>FC_ VALVE 1 CMD OPEN</h1>
+<h2>Overview</h2>
+<p>This function controls a valve with digital output (DO) based on sequence or panel mode operation. It manages valve commands, monitors feedback signals, and determines the valve's operational status. The function provides comprehensive status reporting for various valve positions and fault conditions.</p>
+<h2>Function Inputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Input Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODE</td>
+<td>Bool</td>
+<td>Mode Selection (0=SEQuence; 1=PANel)</td>
+</tr>
+<tr>
+<td>EN_PAN_ALM</td>
+<td>Bool</td>
+<td>Enable alarms effect with PANel mode</td>
+</tr>
+<tr>
+<td>EN_PAN_CND</td>
+<td>Bool</td>
+<td>Enable sequence conditions effect with PANel mode</td>
+</tr>
+<tr>
+<td>ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm</td>
+</tr>
+<tr>
+<td>SEQ_INTERLOCKS</td>
+<td>Bool</td>
+<td>Sequence interlocks (0=Control disabled)</td>
+</tr>
+<tr>
+<td>FDBK_OPEN</td>
+<td>Bool</td>
+<td>Feedback signal indicating valve is open</td>
+</tr>
+<tr>
+<td>FDBK_CLOSE</td>
+<td>Bool</td>
+<td>Feedback signal indicating valve is closed</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Outputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Output Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VALVE_STATUS</td>
+<td>Int</td>
+<td>Integer value indicating valve status (0=Open, 2=Closed, 4=Running Open, 8=Running Close, 16/17/18=Wrong Position)</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Logic</h2>
+<p>The function implements the following logic:</p>
+<h3>Command Control Logic</h3>
+<ul>
+<li>Network 1: Resets PANEL_START under specific conditions:</li>
+<li>When in SEQuence mode (MODE=0)</li>
+<li>When alarms are enabled in panel mode and an alarm is active</li>
+<li>When sequence conditions are enabled in panel mode and interlocks are not satisfied</li>
+</ul>
+<ul>
+<li>Network 2: Resets SEQUENCE_START when:</li>
+<li>An alarm is active</li>
+<li>Sequence interlocks are not satisfied</li>
+<li>In PANel mode (MODE=1)</li>
+</ul>
+<ul>
+<li>Network 3: Sets the VALVE_CMD output based on:</li>
+<li>In SEQuence mode (MODE=0) with SEQUENCE_START active, OR</li>
+<li>In PANel mode (MODE=1) with PANEL_START active</li>
+</ul>
+<h3>Status Determination Logic</h3>
+<p>The function determines the VALVE_STATUS value through multiple networks:</p>
+<ul>
+<li>Status 0: Valve is open (command is active, open feedback is true, close feedback is false)</li>
+<li>Status 2: Valve is closed (command is inactive, open feedback is false, close feedback is true)</li>
+<li>Status 4: Valve is running open (command is active, open feedback is false, no alarm)</li>
+<li>Status 8: Valve is running closed (command is inactive, close feedback is false, no alarm)</li>
+<li>Status 16: Wrong position - closed with alarm (open feedback is false, close feedback is true, alarm is active)</li>
+<li>Status 17: Wrong position - open with alarm (open feedback is true, close feedback is false, alarm is active)</li>
+<li>Status 18: Wrong position - middle with alarm (inconsistent feedback signals with alarm active)</li>
+</ul>
+<p>Each status determination network uses conditional jumps (JCN) to skip the status assignment if conditions are not met, ensuring only one appropriate status value is assigned.</p>
+</body>
+</html>

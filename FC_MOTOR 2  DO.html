@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FC_MOTOR 2  DO</title>
+  <script>
+  function copyCode(codeBlockId) {
+    const codeBlock = document.getElementById(codeBlockId);
+    if (!codeBlock) return;
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text);
+  }
+  </script>
+</head>
+<body>
+  <h1>FC_MOTOR 2  DO</h1>
+  <h1>FC_MOTOR 2 DO</h1>
+<h2>Overview</h2>
+<p>The FC_MOTOR 2 DO function provides motor control functionality with dual digital outputs (forward and reverse). It handles both local and remote operation modes, manages motor commands, tracks runtime hours for maintenance purposes, and provides status monitoring. The function operates without interlocks for the LOCAL mode.</p>
+<h2>Function Inputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Input Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODE</td>
+<td>Bool</td>
+<td>Mode Selection (0=SEQuence;1=PANel)</td>
+</tr>
+<tr>
+<td>EN_PAN_ALM</td>
+<td>Bool</td>
+<td>Enable alarms effect with PANel mode</td>
+</tr>
+<tr>
+<td>EN_PAN_CND</td>
+<td>Bool</td>
+<td>Enable sequence conditions effect with PANel mode</td>
+</tr>
+<tr>
+<td>REMOTE</td>
+<td>Bool</td>
+<td>Ready to work from REMOTE</td>
+</tr>
+<tr>
+<td>LOCAL</td>
+<td>Bool</td>
+<td>Ready to work from LOCAL</td>
+</tr>
+<tr>
+<td>REMOTE_ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm (REMOTE)</td>
+</tr>
+<tr>
+<td>LOCAL_ALARM</td>
+<td>Bool</td>
+<td>Device critical alarm (LOCAL)</td>
+</tr>
+<tr>
+<td>SEQUENCE_INTERLOCK</td>
+<td>Bool</td>
+<td>Sequence interlocks (0=Control disabled)</td>
+</tr>
+<tr>
+<td>LOCAL_START_FORW</td>
+<td>Bool</td>
+<td>Local Start Forward</td>
+</tr>
+<tr>
+<td>LOCAL_START_REV</td>
+<td>Bool</td>
+<td>Local Start Reverse</td>
+</tr>
+<tr>
+<td>LOCAL_STOP</td>
+<td>Bool</td>
+<td>Local Stop</td>
+</tr>
+<tr>
+<td>MAINT_ENABLE</td>
+<td>Bool</td>
+<td>Enable maintenance tracking</td>
+</tr>
+<tr>
+<td>FEEDBACK_FORWARD</td>
+<td>Bool</td>
+<td>Motor running feedback in forward direction</td>
+</tr>
+<tr>
+<td>FEEDBACK_REVERSE</td>
+<td>Bool</td>
+<td>Motor running feedback in reverse direction</td>
+</tr>
+<tr>
+<td>HOUR_SET</td>
+<td>Int</td>
+<td>Hours threshold for service alarm</td>
+</tr>
+<tr>
+<td>CLOCK_1S</td>
+<td>Bool</td>
+<td>1-second clock pulse for timekeeping</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Outputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Output Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOTOR_STATUS</td>
+<td>Int</td>
+<td>Motor operational status code</td>
+</tr>
+<tr>
+<td>SERVICE_ALARM</td>
+<td>Bool</td>
+<td>Maintenance service alarm</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Logic</h2>
+<p>The function implements comprehensive motor control logic across several networks:</p>
+<h3>Command Reset Logic (Networks 1-4)</h3>
+<ul>
+<li>Resets panel and sequence commands based on mode, alarms, and interlocks</li>
+<li>Prevents conflicting commands (forward/reverse simultaneously)</li>
+</ul>
+<h3>Motor Command Logic (Networks 5-6)</h3>
+<ul>
+<li>Controls forward and reverse motor commands based on:</li>
+<li>Mode selection (Sequence/Panel)</li>
+<li>Local/Remote status</li>
+<li>Start/Stop commands</li>
+<li>Alarm conditions</li>
+</ul>
+<h3>Runtime Tracking (Network 7)</h3>
+<ul>
+<li>Implements a timemeter that counts seconds and hours of motor operation</li>
+<li>Increments seconds counter when motor is running (feedback active)</li>
+<li>Converts 3600 seconds to 1 hour in the hour counter</li>
+<li>Provides reset functionality for maintenance purposes</li>
+</ul>
+<h3>Service Alarm (Network 8)</h3>
+<ul>
+<li>Activates SERVICE_ALARM when runtime hours exceed HOUR_SET threshold</li>
+<li>Only functions when MAINT_ENABLE is active</li>
+</ul>
+<h3>Status Monitoring (Networks 10-17)</h3>
+<ul>
+<li>Provides comprehensive status codes in MOTOR_STATUS:</li>
+<li>0: Remote/Not Running</li>
+<li>1: Local/Not Running</li>
+<li>2: Fault/Running</li>
+<li>4: Remote/Running</li>
+<li>8: Remote/Start Command and Waiting Running Feedback</li>
+<li>16: Starter Fault Alarm</li>
+<li>32: Alarms Sum</li>
+</ul>
+<p>The function uses STL jump commands (JCN) to implement conditional logic and efficiently manage the motor's operational states.</p>
+</body>
+</html>

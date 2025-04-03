@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>K_TRAP</title>
+  <script>
+  function copyCode(codeBlockId) {
+    const codeBlock = document.getElementById(codeBlockId);
+    if (!codeBlock) return;
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text);
+  }
+  </script>
+</head>
+<body>
+  <h1>K_TRAP</h1>
+  <h1>K_TRAP</h1>
+<h2>Overview</h2>
+<p>The K_TRAP function block is designed for kiln trap control in a Maerz lime kiln system. It manages various traps, valves, and operational states of a dual-shaft kiln system, coordinating the movement of stone, air flow, and discharge operations. The function block handles the automation of burning cycles, pressure control, and safety interlocks for the kiln operation.</p>
+<h2>Function Inputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Input Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STRP1O</td>
+<td>Bool</td>
+<td>Stone trap shaft 1 open feedback</td>
+</tr>
+<tr>
+<td>STRP1C</td>
+<td>Bool</td>
+<td>Stone trap shaft 1 close feedback</td>
+</tr>
+<tr>
+<td>STRP2O</td>
+<td>Bool</td>
+<td>Stone trap shaft 2 open feedback</td>
+</tr>
+<tr>
+<td>STRP2C</td>
+<td>Bool</td>
+<td>Stone trap shaft 2 close feedback</td>
+</tr>
+<tr>
+<td>SCT1O</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 1 open feedback</td>
+</tr>
+<tr>
+<td>SCT1C</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 1 closed feedback</td>
+</tr>
+<tr>
+<td>SCT2O</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 2 open feedback</td>
+</tr>
+<tr>
+<td>SCT2C</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 2 closed feedback</td>
+</tr>
+<tr>
+<td>RVT1K</td>
+<td>Bool</td>
+<td>Reversal trap shaft 1 air to kiln feedback</td>
+</tr>
+<tr>
+<td>RVT1F</td>
+<td>Bool</td>
+<td>Reversal trap shaft 1 air to filter feedback</td>
+</tr>
+<tr>
+<td>RVT2K</td>
+<td>Bool</td>
+<td>Reversal trap shaft 2 air to kiln feedback</td>
+</tr>
+<tr>
+<td>RVT2F</td>
+<td>Bool</td>
+<td>Reversal trap shaft 2 air to filter feedback</td>
+</tr>
+<tr>
+<td>DTR1O</td>
+<td>Bool</td>
+<td>Discharge trap shaft 1 open feedback</td>
+</tr>
+<tr>
+<td>DTR1C</td>
+<td>Bool</td>
+<td>Discharge trap shaft 1 closed feedback</td>
+</tr>
+<tr>
+<td>DTR2O</td>
+<td>Bool</td>
+<td>Discharge trap shaft 2 open feedback</td>
+</tr>
+<tr>
+<td>DTR2C</td>
+<td>Bool</td>
+<td>Discharge trap shaft 2 closed feedback</td>
+</tr>
+<tr>
+<td>CBRTK</td>
+<td>Bool</td>
+<td>Combustion air relief trap air to kiln feedback</td>
+</tr>
+<tr>
+<td>CBRTE</td>
+<td>Bool</td>
+<td>Combustion air relief trap air to exit feedback</td>
+</tr>
+<tr>
+<td>CLRTK</td>
+<td>Bool</td>
+<td>Cooling air relief trap air to kiln feedback</td>
+</tr>
+<tr>
+<td>CLRTE</td>
+<td>Bool</td>
+<td>Cooling air relief trap air to exit feedback</td>
+</tr>
+<tr>
+<td>PRRTC</td>
+<td>Bool</td>
+<td>Air pre-relief trap closed feedback</td>
+</tr>
+<tr>
+<td>PRRTO</td>
+<td>Bool</td>
+<td>Air pre-relief trap open feedback</td>
+</tr>
+<tr>
+<td>CBMVO</td>
+<td>Bool</td>
+<td>Combustion air manual valve to startup burner open feedback</td>
+</tr>
+<tr>
+<td>KSP_FHYD</td>
+<td>Bool</td>
+<td>Stop kiln, hydraulic oil system fault</td>
+</tr>
+<tr>
+<td>KSP_FBLO</td>
+<td>Bool</td>
+<td>Stop kiln, blower fault</td>
+</tr>
+<tr>
+<td>KSP_FLCB</td>
+<td>Bool</td>
+<td>Stop kiln, lance cooling air blower off</td>
+</tr>
+<tr>
+<td>KSP_FCHA</td>
+<td>Bool</td>
+<td>Stop kiln, charging system fault</td>
+</tr>
+<tr>
+<td>KSP_FDIS</td>
+<td>Bool</td>
+<td>Stop kiln, discharge table fault</td>
+</tr>
+<tr>
+<td>KSP_FHEA</td>
+<td>Bool</td>
+<td>Stop kiln, heating system fault</td>
+</tr>
+<tr>
+<td>KSP_FWGF</td>
+<td>Bool</td>
+<td>Stop kiln, waste gas filter system fault</td>
+</tr>
+<tr>
+<td>BTC_0</td>
+<td>Bool</td>
+<td>Burning time counter = 0</td>
+</tr>
+<tr>
+<td>BTC_OFF</td>
+<td>Bool</td>
+<td>Burning time counter manually stopped</td>
+</tr>
+<tr>
+<td>FUEL_ON</td>
+<td>Bool</td>
+<td>Fuel on status</td>
+</tr>
+<tr>
+<td>FOF_BOT</td>
+<td>Bool</td>
+<td>Fuel off for burn out time</td>
+</tr>
+<tr>
+<td>PRE_BLON</td>
+<td>Bool</td>
+<td>Preselected blowers on</td>
+</tr>
+<tr>
+<td>RH1_EF</td>
+<td>Bool</td>
+<td>Rotary hopper shaft 1 empty/full</td>
+</tr>
+<tr>
+<td>RH2_EF</td>
+<td>Bool</td>
+<td>Rotary hopper shaft 2 empty/full</td>
+</tr>
+<tr>
+<td>CH_MOD1</td>
+<td>Bool</td>
+<td>Charging during burning time first charge enabled</td>
+</tr>
+<tr>
+<td>CH_MOD2</td>
+<td>Bool</td>
+<td>Charging during burning time second charge enabled</td>
+</tr>
+<tr>
+<td>CH_MOD3</td>
+<td>Bool</td>
+<td>Charging during burning time third charge enabled</td>
+</tr>
+<tr>
+<td>CH_TRAP</td>
+<td>Bool</td>
+<td>Charging during burning time traps enabled</td>
+</tr>
+<tr>
+<td>CH_VENT</td>
+<td>Bool</td>
+<td>Charging during burning time increase of WGF speed enabled</td>
+</tr>
+<tr>
+<td>EN_PRRT</td>
+<td>Bool</td>
+<td>Enable pre-relief trap function</td>
+</tr>
+<tr>
+<td>K_MODE</td>
+<td>Bool</td>
+<td>Kiln mode startup/production</td>
+</tr>
+<tr>
+<td>AL_PTL</td>
+<td>Bool</td>
+<td>Alarm pressure low</td>
+</tr>
+<tr>
+<td>AL_PTH</td>
+<td>Bool</td>
+<td>Alarm pressure high</td>
+</tr>
+<tr>
+<td>AL_TEL</td>
+<td>Bool</td>
+<td>Alarm temperature low</td>
+</tr>
+<tr>
+<td>AL_TEH</td>
+<td>Bool</td>
+<td>Alarm temperature high</td>
+</tr>
+<tr>
+<td>AL_RTH</td>
+<td>Bool</td>
+<td>Alarm reversal time high</td>
+</tr>
+<tr>
+<td>AL_LEL</td>
+<td>Bool</td>
+<td>Alarm stone level low</td>
+</tr>
+<tr>
+<td>AL_LEH</td>
+<td>Bool</td>
+<td>Alarm stone level high</td>
+</tr>
+<tr>
+<td>AL_EXCAL</td>
+<td>Bool</td>
+<td>Alarm excess air factor low</td>
+</tr>
+<tr>
+<td>AL_EXCAH</td>
+<td>Bool</td>
+<td>Alarm excess air factor high</td>
+</tr>
+<tr>
+<td>AL_CBFTL</td>
+<td>Bool</td>
+<td>Alarm combustion air flow low</td>
+</tr>
+<tr>
+<td>AL_CBFTH</td>
+<td>Bool</td>
+<td>Alarm combustion air flow high</td>
+</tr>
+<tr>
+<td>AL_CLFTL</td>
+<td>Bool</td>
+<td>Alarm cooling air flow low</td>
+</tr>
+<tr>
+<td>AL_CLFTH</td>
+<td>Bool</td>
+<td>Alarm cooling air flow high</td>
+</tr>
+<tr>
+<td>AL_CBRTF</td>
+<td>Bool</td>
+<td>Combustion air relief trap fault</td>
+</tr>
+<tr>
+<td>AL_CLRTF</td>
+<td>Bool</td>
+<td>Cooling air relief trap fault</td>
+</tr>
+<tr>
+<td>AL_PRRTF</td>
+<td>Bool</td>
+<td>Pre-relief trap fault</td>
+</tr>
+<tr>
+<td>AL_RH1F</td>
+<td>Bool</td>
+<td>Rotary hopper/stone hopper trap shaft 1 fault</td>
+</tr>
+<tr>
+<td>AL_RH2F</td>
+<td>Bool</td>
+<td>Rotary hopper/stone hopper trap shaft 2 fault</td>
+</tr>
+<tr>
+<td>AL_SCT1F</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 1 fault</td>
+</tr>
+<tr>
+<td>AL_SCT2F</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 2 fault</td>
+</tr>
+<tr>
+<td>AL_RVT1F</td>
+<td>Bool</td>
+<td>Reversal trap shaft 1 fault</td>
+</tr>
+<tr>
+<td>AL_RVT2F</td>
+<td>Bool</td>
+<td>Reversal trap shaft 2 fault</td>
+</tr>
+<tr>
+<td>AL_DTRF1</td>
+<td>Bool</td>
+<td>Discharge trap shaft 1 fault</td>
+</tr>
+<tr>
+<td>AL_DTRF2</td>
+<td>Bool</td>
+<td>Discharge trap shaft 2 fault</td>
+</tr>
+<tr>
+<td>AL_NED1</td>
+<td>Bool</td>
+<td>Alarm discharge bin shaft 1 not empty</td>
+</tr>
+<tr>
+<td>AL_NED2</td>
+<td>Bool</td>
+<td>Alarm discharge bin shaft 2 not empty</td>
+</tr>
+<tr>
+<td>AL_DISLEV</td>
+<td>Bool</td>
+<td>Alarm discharge level</td>
+</tr>
+<tr>
+<td>EXT_FLT</td>
+<td>Bool</td>
+<td>External fault</td>
+</tr>
+<tr>
+<td>INTER</td>
+<td>Bool</td>
+<td>Interlock for kiln off</td>
+</tr>
+<tr>
+<td>CO2_FLT</td>
+<td>Bool</td>
+<td>CO2 gas fault</td>
+</tr>
+<tr>
+<td>PB_KON</td>
+<td>Bool</td>
+<td>Pushbutton kiln on</td>
+</tr>
+<tr>
+<td>PB_RVT1</td>
+<td>Bool</td>
+<td>Pushbutton reversal trap shaft 1</td>
+</tr>
+<tr>
+<td>PB_RVT2</td>
+<td>Bool</td>
+<td>Pushbutton reversal trap shaft 2</td>
+</tr>
+<tr>
+<td>PB_SCT1</td>
+<td>Bool</td>
+<td>Pushbutton shaft closing trap shaft 1</td>
+</tr>
+<tr>
+<td>PB_SCT2</td>
+<td>Bool</td>
+<td>Pushbutton shaft closing trap shaft 2</td>
+</tr>
+<tr>
+<td>PB_STRP1</td>
+<td>Bool</td>
+<td>Pushbutton stone trap shaft 1</td>
+</tr>
+<tr>
+<td>PB_STRP2</td>
+<td>Bool</td>
+<td>Pushbutton stone trap shaft 2</td>
+</tr>
+<tr>
+<td>PB_DTR1</td>
+<td>Bool</td>
+<td>Pushbutton discharge trap 1</td>
+</tr>
+<tr>
+<td>PB_DTR2</td>
+<td>Bool</td>
+<td>Pushbutton discharge trap 2</td>
+</tr>
+<tr>
+<td>C_BL_RUN</td>
+<td>Bool</td>
+<td>One cooling air blower runs</td>
+</tr>
+<tr>
+<td>SK_UP_ON</td>
+<td>Bool</td>
+<td>Skip running up</td>
+</tr>
+<tr>
+<td>SK_DW_ON</td>
+<td>Bool</td>
+<td>Skip running down</td>
+</tr>
+<tr>
+<td>TIME_00</td>
+<td>Time</td>
+<td>Kiln stop delay (3 min)</td>
+</tr>
+<tr>
+<td>TIME_01</td>
+<td>Time</td>
+<td>Discharge traps open delay (7 s)</td>
+</tr>
+<tr>
+<td>TIME_02</td>
+<td>Time</td>
+<td>Rotary hopper/stone hopper trap shaft 1 down delay (7 s)</td>
+</tr>
+<tr>
+<td>TIME_03</td>
+<td>Time</td>
+<td>Rotary hopper/stone hopper trap shaft 2 down delay (7 s)</td>
+</tr>
+<tr>
+<td>TIME_04</td>
+<td>Time</td>
+<td>Level sensor shaft 1 up delay (300 ms)</td>
+</tr>
+<tr>
+<td>TIME_05</td>
+<td>Time</td>
+<td>Level sensor shaft 2 up delay (300 ms)</td>
+</tr>
+<tr>
+<td>TIME_06</td>
+<td>Time</td>
+<td>Pre-relief traps time out (20 s)</td>
+</tr>
+<tr>
+<td>TIME_07</td>
+<td>Time</td>
+<td>Combustion air relief trap open delay (1 s)</td>
+</tr>
+<tr>
+<td>TIME_08</td>
+<td>Time</td>
+<td>Cooling air relief trap open delay (2 s)</td>
+</tr>
+<tr>
+<td>TIME_09</td>
+<td>Time</td>
+<td>Shaft closing trap closing delay (5 s)</td>
+</tr>
+<tr>
+<td>TIME_10</td>
+<td>Time</td>
+<td>Level indicator short lift up interval (2 min)</td>
+</tr>
+<tr>
+<td>TIME_11</td>
+<td>Time</td>
+<td>Level indicator short lift up time (500 ms)</td>
+</tr>
+<tr>
+<td>TIME_12</td>
+<td>Time</td>
+<td>Blower off delay (8 min)</td>
+</tr>
+<tr>
+<td>TIME_13</td>
+<td>Time</td>
+<td>Pressure built up timer (6 s)</td>
+</tr>
+<tr>
+<td>TIME_14</td>
+<td>Time</td>
+<td>Start burning time counter delay (1 s)</td>
+</tr>
+<tr>
+<td>TIME_15</td>
+<td>Time</td>
+<td>Level indicator not up delay (1 min)</td>
+</tr>
+<tr>
+<td>TIME_16</td>
+<td>Time</td>
+<td>Cooling air relief trap open delay (1 s)</td>
+</tr>
+<tr>
+<td>TIME_17</td>
+<td>Time</td>
+<td>Enable stone traps in manual mode delay</td>
+</tr>
+<tr>
+<td>TIME_18</td>
+<td>Time</td>
+<td>Start warning duration</td>
+</tr>
+<tr>
+<td>KILN_PT</td>
+<td>Real</td>
+<td>Kiln pressure</td>
+</tr>
+<tr>
+<td>KMREL_PT</td>
+<td>Real</td>
+<td>Kiln main relief pressure</td>
+</tr>
+<tr>
+<td>STL_S1_A</td>
+<td>Real</td>
+<td>Stone level shaft 1 actual</td>
+</tr>
+<tr>
+<td>STL_S2_A</td>
+<td>Real</td>
+<td>Stone level shaft 2 actual</td>
+</tr>
+<tr>
+<td>BTA</td>
+<td>Real</td>
+<td>Burning time counter actual</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Outputs</h2>
+<table border='1'>
+<thead>
+<tr>
+<th>Output Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KILN_ON</td>
+<td>Bool</td>
+<td>Kiln on status</td>
+</tr>
+<tr>
+<td>KILN_STW</td>
+<td>Bool</td>
+<td>Kiln start warning delay</td>
+</tr>
+<tr>
+<td>SH_PRE</td>
+<td>Bool</td>
+<td>Burning shaft preselection shaft 2/shaft 1</td>
+</tr>
+<tr>
+<td>RTBT</td>
+<td>Bool</td>
+<td>Kiln reversal RT/BT</td>
+</tr>
+<tr>
+<td>BURN_POS</td>
+<td>Bool</td>
+<td>Kiln burning position</td>
+</tr>
+<tr>
+<td>RES</td>
+<td>Bool</td>
+<td>Reset burning time counter</td>
+</tr>
+<tr>
+<td>BL_ST</td>
+<td>Bool</td>
+<td>Auto start signal for blowers</td>
+</tr>
+<tr>
+<td>PT_ENA</td>
+<td>Bool</td>
+<td>Kiln pressure alarms enable</td>
+</tr>
+<tr>
+<td>BTC_ON</td>
+<td>Bool</td>
+<td>Burning time counter on</td>
+</tr>
+<tr>
+<td>FUEL_EN</td>
+<td>Bool</td>
+<td>Fuel on enable</td>
+</tr>
+<tr>
+<td>FUEL_ST</td>
+<td>Bool</td>
+<td>Fuel start impulse</td>
+</tr>
+<tr>
+<td>AL_CBMVO</td>
+<td>Bool</td>
+<td>Alarm combustion air manual valve to startup burner not open</td>
+</tr>
+<tr>
+<td>AL_BTC</td>
+<td>Bool</td>
+<td>Alarm burning time counter manually stopped</td>
+</tr>
+<tr>
+<td>AL_KCH</td>
+<td>Bool</td>
+<td>Alarm kiln was not charged</td>
+</tr>
+<tr>
+<td>AL_LEV</td>
+<td>Bool</td>
+<td>Alarm level indicator not up</td>
+</tr>
+<tr>
+<td>AL_TRAP</td>
+<td>Bool</td>
+<td>Alarm kiln traps not closed</td>
+</tr>
+<tr>
+<td>SOL_STONETRAP1</td>
+<td>Bool</td>
+<td>Stone trap shaft 1 open/close</td>
+</tr>
+<tr>
+<td>SOL_STONETRAP2</td>
+<td>Bool</td>
+<td>Stone trap shaft 2 open/close</td>
+</tr>
+<tr>
+<td>SOL_SCT1</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 1 open/close</td>
+</tr>
+<tr>
+<td>SOL_SCT2</td>
+<td>Bool</td>
+<td>Shaft closing trap shaft 2 open/close</td>
+</tr>
+<tr>
+<td>SOL_RVT1</td>
+<td>Bool</td>
+<td>Reversal trap shaft 1 air to kiln/air to chimney</td>
+</tr>
+<tr>
+<td>SOL_RVT2</td>
+<td>Bool</td>
+<td>Reversal trap shaft 2 air to kiln/air to chimney</td>
+</tr>
+<tr>
+<td>SOL_DTR1</td>
+<td>Bool</td>
+<td>Discharge trap shaft 1 open/close</td>
+</tr>
+<tr>
+<td>SOL_DTR2</td>
+<td>Bool</td>
+<td>Discharge trap shaft 2 open/close</td>
+</tr>
+<tr>
+<td>SOL_CBRT</td>
+<td>Bool</td>
+<td>Combustion air relief trap air to kiln/air to exit</td>
+</tr>
+<tr>
+<td>SOL_CLRT</td>
+<td>Bool</td>
+<td>Cooling air relief trap air to kiln/air to exit</td>
+</tr>
+<tr>
+<td>SOL_PREL</td>
+<td>Bool</td>
+<td>Air pre-relief trap open/close</td>
+</tr>
+<tr>
+<td>SOL_LEV1</td>
+<td>Bool</td>
+<td>Level indicator shaft 1 down/up</td>
+</tr>
+<tr>
+<td>SOL_LEV2</td>
+<td>Bool</td>
+<td>Level indicator shaft 2 down/up</td>
+</tr>
+<tr>
+<td>RES_TRAP</td>
+<td>Bool</td>
+<td>Reset charging during burning time traps enable</td>
+</tr>
+<tr>
+<td>RES_VENT</td>
+<td>Bool</td>
+<td>Reset charging during burning time increase of WGF speed enabled</td>
+</tr>
+<tr>
+<td>PT_KON</td>
+<td>Bool</td>
+<td>PT pushbutton kiln on</td>
+</tr>
+<tr>
+<td>PT_RVT1</td>
+<td>Bool</td>
+<td>PT pushbutton reversal trap shaft 1</td>
+</tr>
+<tr>
+<td>PT_RVT2</td>
+<td>Bool</td>
+<td>PT pushbutton reversal trap shaft 2</td>
+</tr>
+<tr>
+<td>PT_SCT1</td>
+<td>Bool</td>
+<td>PT pushbutton shaft closing trap shaft 1</td>
+</tr>
+<tr>
+<td>PT_SCT2</td>
+<td>Bool</td>
+<td>PT pushbutton shaft closing trap shaft 2</td>
+</tr>
+<tr>
+<td>PT_STRP1</td>
+<td>Bool</td>
+<td>PT pushbutton stone trap shaft 1</td>
+</tr>
+<tr>
+<td>PT_STRP2</td>
+<td>Bool</td>
+<td>PT pushbutton stone trap shaft 2</td>
+</tr>
+<tr>
+<td>PT_DTR1</td>
+<td>Bool</td>
+<td>PT pushbutton discharge trap 1</td>
+</tr>
+<tr>
+<td>PT_DTR2</td>
+<td>Bool</td>
+<td>PT pushbutton discharge trap 2</td>
+</tr>
+</tbody>
+</table>
+<h2>Function Logic</h2>
+<p>The K_TRAP function block manages the complex operation of a dual-shaft kiln system through several key functional areas:</p>
+<ul>
+<li>**Initialization and Flag Setting**: The function begins by setting up logic flags (HIGH/LOW) that are used throughout the program.</li>
+</ul>
+<ul>
+<li>**Alarm Management**: The block monitors various alarm conditions including trap faults, pressure issues, temperature problems, and burning time counter status. These alarms can trigger kiln shutdown with a configurable delay.</li>
+</ul>
+<ul>
+<li>**Kiln Operation Control**: The function handles kiln start/stop operations through pushbutton inputs with appropriate interlocks and safety checks. It includes a start warning delay before the kiln is fully activated.</li>
+</ul>
+<ul>
+<li>**Trap Position Management**: The block controls multiple trap positions including:</li>
+<li>Relief traps (combustion and cooling air)</li>
+<li>Discharge traps</li>
+<li>Reversal traps</li>
+<li>Shaft closing traps</li>
+<li>Stone traps</li>
+</ul>
+<ul>
+<li>**Burning Cycle Control**: The function manages the burning cycle including:</li>
+<li>Burning time counter operation</li>
+<li>Shaft preselection for burning</li>
+<li>Charging control during burning time</li>
+<li>Fuel enabling based on pressure and temperature conditions</li>
+</ul>
+<ul>
+<li>**Pressure Control**: The block monitors kiln pressure and controls relief traps to maintain appropriate pressure levels.</li>
+</ul>
+<ul>
+<li>**Level Monitoring**: The function tracks stone levels in both shafts and controls level indicators.</li>
+</ul>
+<ul>
+<li>**Charging Logic**: The block implements complex charging logic to determine which shaft receives material based on the current burning state and shaft selection.</li>
+</ul>
+<ul>
+<li>**Manual Override**: The function provides manual control capabilities for all traps through pushbutton inputs with appropriate interlocks.</li>
+</ul>
+<ul>
+<li>**Timer Management**: The block uses multiple timers to control delays for various operations including trap movements, pressure build-up, and alarm conditions.</li>
+</ul>
+<p>The function uses a combination of direct logic operations, timer functions, and state tracking to coordinate the entire kiln operation while maintaining safety interlocks and proper sequencing of operations.</p>
+</body>
+</html>
